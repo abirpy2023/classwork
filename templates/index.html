@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+{% load static %}
+{% load humanize %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}Home{% endblock title %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+        <style>
+            *{
+            margin: 0px;
+            padding: 0px;
+        }
+        #message{
+            position:fixed;
+            right:40%;
+            bottom:5px;
+        }
+        body{
+            background: #18181b;
+            font-family: serif;
+        }
+         #py{
+            font-size:5rem;
+            color:#065f46;
+        }
+        </style>
+       {% block style %}
+        
+       <style>
+        .list ul li a{
+            text-decoration:none;
+            color:#fde047;
+        }
+        .icon i{
+            color:red;
+        }
+        
+       </style>
+       
+       {% endblock style %}
+    </head>
+    <body>
+    <!-----------Navbar------------------------------>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Py</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/"><i class="bi bi-house-heart-fill"></i> Home</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-tools"></i> Tools
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-book-half"></i>  All Post</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-database-fill-x"></i>  Data Analysis</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-x-circle-fill"></i>  Exit</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-chat-square-heart-fill"></i> Send Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-android2"></i> About</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+       
+        <h5 style="color:white;">{{my_date}}</h5>
+      </form>
+    </div>
+  </div>
+</nav>
+    <!-------------------END----Nav------------------------>
+        
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert" id="message">
+                <strong>
+                    <i class="bi bi-chat-square-text-fill" style="color:red;"></i>
+                    {{message}}
+                </strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="row">
+            <marquee>Hello Brothers</marquee>
+        </div>
+        <br>
+    {% block body %}
+        <div class="row">
+            <div class="col-sm-7" id="content">
+            {% for obj in data %}
+               <div class="d-flex justify-content-between">
+                    <div>
+                        <h1 style="color:white;"> {{obj.title}} </h1>
+                        <hr style="color:green">
+                    </div>
+                    <div>
+                        <span class="badge text-bg-info">{{obj.tag}}</span>
+                    </div>
+                    <div class="icon">
+                        <span class="badge text-bg-warning"><i class="bi bi-eye-fill"> </i> {{obj.view}}</span>
+                    </div>  
+               </div>
+
+               <div class="x">
+                <h1 style="color:white;font-size:18px;">{{obj.detail|truncatechars:700|linebreaks}}</h1>
+               </div>
+
+               <div class="d-flex justify-content-between">
+                <div>
+                    <span style="color:steelblue;"> <i class="bi bi-person-circle"></i> {{obj.operator}}</span>
+                </div>
+    
+                <div style="padding-bottom:10px;">
+                    <a class="btn btn-danger" role="button" href="/post/{{obj.id}}/">View Full <i class="bi bi-chevron-double-right"></i> </a>
+                </div>
+               </div>
+               {% endfor %}
+            </div>
+            <div class="col-sm-5">
+                <div>
+                    <div  class="d-flex justify-content-center">
+                        <h3>Recent Topic's</h3>
+                    </div>
+                    <div class="list">
+                        <ul>
+                            {% for recent in data2 %}
+                            <li><a href="/post/{{recent.id}}/">{{recent.title}}</a> - <sub style="color:orange;">{{recent.created_at|naturaltime}}</sub></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+    <hr style="color:#059669;padding:5px;">
+
+                <div class="d-flex justify-content-around">
+                    <p id="py">Py</p>
+                    <div>
+                        <h5 style="color:#e11d48;">Subscribe For Notification</h5>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                <input class="form-control" type="email" name="email" placeholder="Email" required>
+
+                                <input type="hidden" name="ip" value="{{myip}}">
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">Subscribe  <i class="bi bi-bell"></i></button>
+                            </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    
+                </div>  
+    </div>
+    {% endblock body %}
+    
+    
+        <div class="row">
+            <h5 style="text-align:center;">Copyright <i class="bi bi-c-circle-fill"></i> 2023</h5>
+        </div>
+    </div>
+    </body>
+</html>

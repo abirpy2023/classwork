@@ -1,0 +1,96 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}View Page{% endblock title %}
+{% block style %}
+<style>
+.display-3{
+    color:white;
+    padding:5px;
+}
+.eye,.time,.person{
+    padding:10px;
+    color:white;
+    font-size:15px;
+}
+.eye i{
+    color:blue;
+}
+.time i{
+    color:blue;
+}
+.person i{
+    color:blue;
+}
+.cdat{
+    padding:20px;
+}
+.cmbox{
+    border:1px solid black;
+    background: #ffe4e6;
+    border-radius: 10px;
+}
+.body{
+    margin-left:2%;
+}
+</style>
+{% endblock style %}
+{% block body %}
+
+<div class="row">
+    <div class="d-flex justify-content-start">
+        <div>
+            <p class="display-3">{{post.title}}</p>
+        </div>
+        <div>
+            <span class="badge text-bg-danger">{{post.tag}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <div class="eye">
+                <i class="bi bi-eye-fill"> </i> {{post.view}}
+            </div>
+            <div class="time">
+                <i class="bi bi-clock-fill"></i> {{post.created_at|naturaltime}}
+            </div>
+            <div class="person">
+                <i class="bi bi-person-fill"></i> {{post.operator}}
+            </div>
+        </div>
+    </div>
+</div>
+<span style="padding:10px;"></span>
+<div class="row">
+    <h5 style="color:white;text-align:justify;">{{post.detail|linebreaks}}</h5>
+</div>
+<br>
+<div class="row">
+    
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" class="form-control" name="name" placeholder="Your Name" required><br>
+            <textarea rows="5" name="body" placeholder="Write Comment" class="form-control" required></textarea><br>
+            <input type="hidden"  name="post_id" value="{{post.id}}">
+            <input type="submit" class="form-control btn btn-primary" value="Send">
+        </form>
+</div>
+<br>
+<hr style="color:green;">
+<div class="row">
+    <br>
+    <h6 style="color:#cbd5e1;"><i class="bi bi-chat-square-text-fill"></i> Comments ( {{comment.count}} )</h6>
+    {% for c in comment %}
+    
+    <div class="cmbox">
+        <div class="cdat">
+           <strong style="color:steelblue"><i style="color:green;" class="bi bi-person-fill"></i> {{c.name}} - <small> {{c.created_at|naturaltime}}</small></strong>
+        </div>
+        <div class="body">
+            <h7 style="color:red;">{{c.body|linebreaks}}</h7>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<br><br>
+{% endblock body %}
